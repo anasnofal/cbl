@@ -20,12 +20,13 @@ public class Player extends Entity {
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
-
+        solidArea = new Rectangle(8, 16, 28, 28);
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues(){
+
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 4;
@@ -57,17 +58,42 @@ public class Player extends Entity {
         
             if (keyHandler.upPressed) {
                 direction = "up";
-                worldY -= speed;
+                
             } else if (keyHandler.downPressed) {
                 direction = "down";
-                worldY += speed;
+                
             } else if (keyHandler.leftPressed) {
                 direction = "left";
-                worldX -= speed;
+                
             } else if (keyHandler.rightPressed) {
                 direction = "right";
-                worldX += speed;
+                
             }
+            collisionOn = false;
+
+            gp.cChecker.checkTile(this);
+            // if collision is false, player can move
+            if (!collisionOn) {
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                        break;
+
+                    case "down":
+                        worldY += speed;
+                        break;
+                        
+                    case "left":
+                        worldX -= speed;
+                        break;
+
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
+                
+            }
+
             spritCounter++;
             if (spritCounter > 15) {
                 if (spriteNum == 1) {
@@ -85,6 +111,7 @@ public class Player extends Entity {
         BufferedImage image = null;
 
         switch (direction) {
+
             case "up":
                 if (spriteNum == 1) {
                     image = up1;
